@@ -63,4 +63,8 @@ public interface PetRepository extends Repository<Pet, Integer> {
 	@Transactional(readOnly=true)
 	PetType findPetType(int petTypeId);
 
+	@Query("SELECT DISTINCT pet FROM Pet pet inner join pet.owner owner WHERE owner.id = :ownerid")
+	@Transactional(readOnly=true)
+	List<Pet> findByOwnerId(int ownerid);
+
 }
