@@ -31,7 +31,7 @@ import javassist.NotFoundException;
  *
  */
 
-@RestController("PetController")
+@RestController("PetRestController")
 @RequestMapping("/api/owners/{ownerid}/pets")
 public class PetController {
 	Logger logger=LoggerFactory.getLogger(this.getClass());
