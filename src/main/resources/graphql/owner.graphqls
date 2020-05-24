@@ -1,0 +1,16 @@
+type Owner {
+  id: ID
+  firstName: String
+  lastName: String
+  address: String
+  city: String
+  telephone: String
+}
+
+type Query {
+  owners:[Owner!]
+}
+
+type Mutation {
+  newOwner(firstName: String!, lastName: String!,address:String,city:String,telephone:String) : Owner!
+}
