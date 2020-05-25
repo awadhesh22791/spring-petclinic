@@ -11,13 +11,7 @@ public class OwnerMutation implements GraphQLMutationResolver {
 	@Autowired
 	OwnerRepository owners;
 
-	public Owner newOwner(String firstName, String lastName,String address,String city,String telephone) {
-		Owner owner=new Owner();
-		owner.setFirstName(firstName);
-		owner.setLastName(lastName);
-		owner.setAddress(address);
-		owner.setCity(city);
-		owner.setTelephone(telephone);
+	public Owner newOwner(Owner owner) {
 		owners.save(owner);
 		return owner;
 	}

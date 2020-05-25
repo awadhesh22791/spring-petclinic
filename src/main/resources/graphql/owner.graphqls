@@ -16,10 +16,19 @@ input OwnerFilter{
 	city: String
 	telephone: String
 }
+
+input OwnerForm{
+	firstName: String
+	lastName: String
+	address: String
+	city: String
+	telephone: String
+}
+
 type Query {
 	owners(owner:OwnerFilter!,page:Int,size:Int):[Owner!]
 }
 
 type Mutation {
-  newOwner(firstName: String!, lastName: String!,address:String,city:String,telephone:String) : Owner!
+  newOwner(owner:OwnerForm) : Owner!
 }
