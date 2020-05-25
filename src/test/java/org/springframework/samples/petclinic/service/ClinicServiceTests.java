@@ -17,9 +17,11 @@
 package org.springframework.samples.petclinic.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +94,12 @@ class ClinicServiceTests {
 
 	@Test
 	void shouldFindSingleOwnerWithPet() {
-		Owner owner = this.owners.findById(1);
-		assertThat(owner.getLastName()).startsWith("Franklin");
-		assertThat(owner.getPets()).hasSize(1);
-		assertThat(owner.getPets().get(0).getType()).isNotNull();
-		assertThat(owner.getPets().get(0).getType().getName()).isEqualTo("cat");
+		Optional<Owner> owner = this.owners.findById(1);
+		assertTrue(owner.isPresent());
+		assertThat(owner.get().getLastName()).startsWith("Franklin");
+		assertThat(owner.get().getPets()).hasSize(1);
+		assertThat(owner.get().getPets().get(0).getType()).isNotNull();
+		assertThat(owner.get().getPets().get(0).getType().getName()).isEqualTo("cat");
 	}
 
 	@Test
@@ -121,16 +124,17 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldUpdateOwner() {
-		Owner owner = this.owners.findById(1);
-		String oldLastName = owner.getLastName();
+		Optional<Owner> owner = this.owners.findById(1);
+		assertTrue(owner.isPresent());
+		String oldLastName = owner.get().getLastName();
 		String newLastName = oldLastName + "X";
 
-		owner.setLastName(newLastName);
-		this.owners.save(owner);
+		owner.get().setLastName(newLastName);
+		this.owners.save(owner.get());
 
 		// retrieving new name from database
 		owner = this.owners.findById(1);
-		assertThat(owner.getLastName()).isEqualTo(newLastName);
+		assertThat(owner.get().getLastName()).isEqualTo(newLastName);
 	}
 
 	@Test
@@ -154,22 +158,23 @@ class ClinicServiceTests {
 	@Test
 	@Transactional
 	void shouldInsertPetIntoDatabaseAndGenerateId() {
-		Owner owner6 = this.owners.findById(6);
-		int found = owner6.getPets().size();
+		Optional<Owner> owner6 = this.owners.findById(6);
+		assertTrue(owner6.isPresent());
+		int found = owner6.get().getPets().size();
 
 		Pet pet = new Pet();
 		pet.setName("bowser");
 		Collection<PetType> types = this.pets.findPetTypes();
 		pet.setType(EntityUtils.getById(types, PetType.class, 2));
 		pet.setBirthDate(LocalDate.now());
-		owner6.addPet(pet);
-		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
+		owner6.get().addPet(pet);
+		assertThat(owner6.get().getPets().size()).isEqualTo(found + 1);
 
 		this.pets.save(pet);
-		this.owners.save(owner6);
+		this.owners.save(owner6.get());
 
 		owner6 = this.owners.findById(6);
-		assertThat(owner6.getPets().size()).isEqualTo(found + 1);
+		assertThat(owner6.get().getPets().size()).isEqualTo(found + 1);
 		// checks that id has been generated
 		assertThat(pet.getId()).isNotNull();
 	}

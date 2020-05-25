@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.owner.rest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -82,8 +83,11 @@ public class OwnerController {
 	}
 
 	private ExistingOwnerForm getOwnerDetail(int ownerId) {
-		Owner existingOwner=this.owners.findById(ownerId);
-		return getOwnerDetail(existingOwner);
+		Optional<Owner> existingOwner=this.owners.findById(ownerId);
+		if(existingOwner.isPresent()) {
+			return getOwnerDetail(existingOwner.get());
+		}
+		return null;
 	}
 
 	@PutMapping("")
@@ -97,9 +101,11 @@ public class OwnerController {
 	}
 	
 	private void updateOwner(final ExistingOwnerForm existingOwnerForm) {
-		Owner existingOwner=this.owners.findById(existingOwnerForm.getId());
-		existingOwner=existingOwnerForm.NewOwner();
-		this.owners.save(existingOwner);
+		Optional<Owner> existingOwnerResult=this.owners.findById(existingOwnerForm.getId());
+		if(existingOwnerResult.isPresent()) {
+			Owner existingOwner=existingOwnerForm.NewOwner();
+			this.owners.save(existingOwner);
+		}
 	}
 
 	private Collection<ExistingOwnerForm> getAllOwners(NewOwnerForm ownerForm) {

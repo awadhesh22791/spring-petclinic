@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Juergen Hoeller
@@ -108,8 +109,10 @@ class OwnerController {
 
 	@GetMapping("/owners/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
-		Owner owner = this.owners.findById(ownerId);
-		model.addAttribute(owner);
+		Optional<Owner> owner = this.owners.findById(ownerId);
+		if(owner.isPresent()) {
+			model.addAttribute(owner);
+		}
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
@@ -134,11 +137,13 @@ class OwnerController {
 	@GetMapping("/owners/{ownerId}")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		Owner owner = this.owners.findById(ownerId);
-		for (Pet pet : owner.getPets()) {
-			pet.setVisitsInternal(visits.findByPetId(pet.getId()));
-		}
+		Optional<Owner> owner = this.owners.findById(ownerId);
+		if(owner.isPresent()) {
+			for (Pet pet : owner.get().getPets()) {
+				pet.setVisitsInternal(visits.findByPetId(pet.getId()));
+			}
 		mav.addObject(owner);
+		}
 		return mav;
 	}
 

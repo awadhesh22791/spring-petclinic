@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.owner.graphql;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
@@ -13,6 +15,10 @@ public class OwnerQueryResolver implements GraphQLResolver<Owner> {
 	private OwnerRepository owners;
 
 	public Owner getOwner(Owner owner) {
-		return owners.findById(owner.getId());
+		Optional<Owner> result = owners.findById(owner.getId());
+		if(result.isPresent()) {
+			return result.get();
+		}
+		return null;
 	}
 }

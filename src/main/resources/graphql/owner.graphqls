@@ -1,14 +1,23 @@
 type Owner {
-  id: ID
-  firstName: String
-  lastName: String
-  address: String
-  city: String
-  telephone: String
+	id: ID
+	firstName: String
+	lastName: String
+	address: String
+	city: String
+	telephone: String
+	pets:[Pet]!
 }
 
+input OwnerFilter{
+	id: ID
+	firstName: String
+	lastName: String
+	address: String
+	city: String
+	telephone: String
+}
 type Query {
-  owners:[Owner!]
+	owners(owner:OwnerFilter!,page:Int,size:Int):[Owner!]
 }
 
 type Mutation {

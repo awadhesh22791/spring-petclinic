@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author Juergen Hoeller
@@ -52,7 +53,11 @@ class PetController {
 
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable("ownerId") int ownerId) {
-		return this.owners.findById(ownerId);
+		Optional<Owner> owner = this.owners.findById(ownerId);
+		if(owner.isPresent()) {
+			return owner.get();
+		}
+		return null;
 	}
 
 	@InitBinder("owner")
