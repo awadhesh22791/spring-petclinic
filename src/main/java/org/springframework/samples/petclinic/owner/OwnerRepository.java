@@ -16,9 +16,11 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-public interface OwnerRepository extends Repository<Owner, Integer> {
+public interface OwnerRepository extends JpaRepository<Owner, Integer>,JpaSpecificationExecutor<Owner> {
 
 	/**
 	 * Retrieve {@link Owner}s from the data store by last name, returning all owners
@@ -53,12 +55,6 @@ public interface OwnerRepository extends Repository<Owner, Integer> {
 	 */
 	@Query("SELECT owner FROM Owner owner left join fetch owner.pets WHERE owner.id =:id")
 	@Transactional(readOnly = true)
-	Owner findById(@Param("id") Integer id);
-
-	/**
-	 * Save an {@link Owner} to the data store, either inserting or updating it.
-	 * @param owner the {@link Owner} to save
-	 */
-	void save(Owner owner);
+	Optional<Owner> findById(@Param("id") Integer id);
 
 }

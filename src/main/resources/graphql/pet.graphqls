@@ -1,0 +1,4 @@
+type Pet {
+	id: ID
+	name: String
+}
