@@ -55,5 +55,16 @@ public interface PetRepository extends Repository<Pet, Integer> {
 	 * @param pet the {@link Pet} to save
 	 */
 	void save(Pet pet);
+	/**
+	 * Retrieve all {@link PetType}s from the data store.
+	 * @return a Collection of {@link PetType}s.
+	 */
+	@Query("SELECT ptype FROM PetType ptype WHERE ptype.id=:petTypeId")
+	@Transactional(readOnly=true)
+	PetType findPetType(int petTypeId);
+
+	@Query("SELECT DISTINCT pet FROM Pet pet inner join pet.owner owner WHERE owner.id = :ownerid")
+	@Transactional(readOnly=true)
+	List<Pet> findByOwnerId(int ownerid);
 
 }
