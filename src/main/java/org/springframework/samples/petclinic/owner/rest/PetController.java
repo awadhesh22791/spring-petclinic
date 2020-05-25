@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.owner.rest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -133,22 +134,27 @@ public class PetController {
 	}
 
 	private void createNewPet(int ownerid, @Valid NewPetForm pet) {
-		Owner owner=this.owners.findById(ownerid);
+		Optional<Owner> owner=this.owners.findById(ownerid);
 		PetType petType=this.pets.findPetType(pet.getPetTypeId());
 		Pet newPet=pet.getPet(pet);
 		newPet.setType(petType);
-		owner.addPet(newPet);
-		this.pets.save(newPet);
+		if(owner.isPresent()) {
+			owner.get().addPet(newPet);
+			this.pets.save(newPet);
+		}
 	}
 
 	private boolean petAlreadyAvailable(final int ownerid, final NewPetForm pet) {
-		Owner owner=this.owners.findById(ownerid);
-		return owner.getPet(pet.getName(), true) != null;
+		Optional<Owner> owner=this.owners.findById(ownerid);
+		if(owner.isPresent()) {
+			return owner.get().getPet(pet.getName(), true) != null;
+		}
+		return false;
 	}
 	
 	private void checkOwner(int ownerid) throws NotFoundException {
-		Owner owner=this.owners.findById(ownerid);
-		if(owner==null) {
+		Optional<Owner> owner=this.owners.findById(ownerid);
+		if(!owner.isPresent()) {
 			throw new NotFoundException("Owner not found");
 		}
 	}

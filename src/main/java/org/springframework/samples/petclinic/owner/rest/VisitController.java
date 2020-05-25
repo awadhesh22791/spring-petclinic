@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.owner.rest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -91,8 +92,8 @@ public class VisitController {
 	}
 
 	private void checkOwner(int ownerId) throws NotFoundException {
-		Owner owner=this.owners.findById(ownerId);
-		if(owner==null) {
+		Optional<Owner> owner=this.owners.findById(ownerId);
+		if(!owner.isPresent()) {
 			throw new NotFoundException("Owner not found.");
 		}
 	}
