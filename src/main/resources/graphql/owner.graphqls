@@ -18,6 +18,7 @@ input OwnerFilter{
 }
 
 input OwnerForm{
+	id: ID!
 	firstName: String
 	lastName: String
 	address: String
