@@ -112,20 +112,21 @@ public class PetController {
 	}
 	
 	private ExistingPetForm getOnePet(int petid) {
-		Pet existingPet=this.pets.findById(petid);
+		Optional<Pet> existingPet=this.pets.findById(petid);
 		ExistingPetForm pet=null;
-		if(existingPet!=null) {
+		if(existingPet.isPresent()) {
 			pet=new ExistingPetForm();
-			pet=pet.getPet(existingPet);
+			pet=pet.getPet(existingPet.get());
 		}
 		return pet;
 	}
 	
 	private void updatePet(int ownerid, final ExistingPetForm pet) throws NotFoundException {
-		Pet existingPet=this.pets.findById(pet.getId());
-		if(existingPet==null || !existingPet.getOwner().getId().equals(ownerid)) {
+		Optional<Pet> existingPetResult=this.pets.findById(pet.getId());
+		if(existingPetResult.isPresent() || !existingPetResult.get().getOwner().getId().equals(ownerid)) {
 			throw new NotFoundException("Pet not found");
 		}
+		Pet existingPet=existingPetResult.get();
 		existingPet.setBirthDate(pet.getBirthDate());
 		existingPet.setName(pet.getName());
 		PetType petType=this.pets.findPetType(pet.getPetTypeId());

@@ -111,7 +111,7 @@ class OwnerController {
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
 		Optional<Owner> owner = this.owners.findById(ownerId);
 		if(owner.isPresent()) {
-			model.addAttribute(owner);
+			model.addAttribute(owner.get());
 		}
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
@@ -142,7 +142,7 @@ class OwnerController {
 			for (Pet pet : owner.get().getPets()) {
 				pet.setVisitsInternal(visits.findByPetId(pet.getId()));
 			}
-		mav.addObject(owner);
+		mav.addObject(owner.get());
 		}
 		return mav;
 	}

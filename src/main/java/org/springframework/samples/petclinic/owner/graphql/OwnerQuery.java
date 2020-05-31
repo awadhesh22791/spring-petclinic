@@ -8,9 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.samples.petclinic.model.SearchCriteria;
 import org.springframework.samples.petclinic.model.SearchOperation;
+import org.springframework.samples.petclinic.model.EntitySpecification;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
-import org.springframework.samples.petclinic.owner.OwnerSpecification;
 import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
@@ -20,13 +20,13 @@ public class OwnerQuery implements GraphQLQueryResolver{
 	
 	public List<Owner> owners(Owner owner,int page,int size){
 		Pageable pageable=PageRequest.of(page, size);
-		OwnerSpecification ownerSpec=getOwnerSpecification(owner);
+		EntitySpecification<Owner> ownerSpec=getOwnerSpecification(owner);
 		Page<Owner> ownersPage = owners.findAll(ownerSpec,pageable);
 		return ownersPage.getContent();
 	}
 
-	private OwnerSpecification getOwnerSpecification(Owner owner) {
-		OwnerSpecification spec=new OwnerSpecification();
+	private EntitySpecification<Owner> getOwnerSpecification(Owner owner) {
+		EntitySpecification<Owner> spec=new EntitySpecification<Owner>();
 		if(owner.getId()!=null) {
 			spec.add(new SearchCriteria("id", owner.getId(), SearchOperation.EQUAL));
 		}

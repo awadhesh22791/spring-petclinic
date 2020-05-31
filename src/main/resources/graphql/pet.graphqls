@@ -1,4 +1,31 @@
+type Name{
+	name:String
+}
+
 type Pet {
 	id: ID
 	name: String
+	birthDate:String
+	type: Name
+	owner: Owner
+}
+
+input NameFilter{
+	name:String
+}
+
+input PetFilter {
+	id: ID
+	name: String
+	birthDate:String
+	type: NameFilter
+	owner: OwnerFilter
+}
+
+extend type Query {
+	pets(pet:PetFilter!,page:Int,size:Int):[Pet!]
+}
+
+schema {
+	query: Query
 }

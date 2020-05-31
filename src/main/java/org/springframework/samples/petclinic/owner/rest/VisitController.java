@@ -85,8 +85,8 @@ public class VisitController {
 	}
 
 	private void checkOwnerPet(int ownerId, int petId) throws NotFoundException {
-		Pet pet=this.pets.findById(petId);
-		if(pet==null || pet.getOwner().getId()!=ownerId) {
+		Optional<Pet> pet=this.pets.findById(petId);
+		if(pet.isPresent() || pet.get().getOwner().getId()!=ownerId) {
 			throw new NotFoundException("Pet not found.");
 		}
 	}
