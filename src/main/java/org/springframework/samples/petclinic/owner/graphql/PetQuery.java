@@ -31,7 +31,7 @@ public class PetQuery implements GraphQLQueryResolver{
 			if(pet.getId()!=null) {
 				spec.add(new SearchCriteria("id", pet.getId(), SearchOperation.EQUAL));
 			}
-			if(pet.getName()!=null && !pet.getName().isBlank()) {
+			if(pet.getName()!=null && !pet.getName().isEmpty()) {
 				spec.add(new SearchCriteria("name", pet.getName(), SearchOperation.MATCH_START));
 			}
 			if(pet.getBirthDate()!=null) {

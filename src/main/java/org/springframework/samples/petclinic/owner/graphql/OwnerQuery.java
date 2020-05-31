@@ -30,19 +30,19 @@ public class OwnerQuery implements GraphQLQueryResolver{
 		if(owner.getId()!=null) {
 			spec.add(new SearchCriteria("id", owner.getId(), SearchOperation.EQUAL));
 		}
-		if(owner.getAddress()!=null && !owner.getAddress().isBlank()) {
+		if(owner.getAddress()!=null && !owner.getAddress().isEmpty()) {
 			spec.add(new SearchCriteria("address", owner.getAddress(), SearchOperation.MATCH_START));
 		}
-		if(owner.getCity()!=null && !owner.getCity().isBlank()) {
+		if(owner.getCity()!=null && !owner.getCity().isEmpty()) {
 			spec.add(new  SearchCriteria("city", owner.getCity(), SearchOperation.MATCH_START));
 		}
-		if(owner.getFirstName()!=null && !owner.getFirstName().isBlank()) {
+		if(owner.getFirstName()!=null && !owner.getFirstName().isEmpty()) {
 			spec.add(new SearchCriteria("firstName", owner.getFirstName(), SearchOperation.MATCH_START));
 		}
-		if(owner.getLastName()!=null && !owner.getLastName().isBlank()) {
+		if(owner.getLastName()!=null && !owner.getLastName().isEmpty()) {
 			spec.add(new SearchCriteria("lastName", owner.getLastName(), SearchOperation.MATCH_START));
 		}
-		if(owner.getTelephone()!=null && !owner.getTelephone().isBlank()) {
+		if(owner.getTelephone()!=null && !owner.getTelephone().isEmpty()) {
 			spec.add(new SearchCriteria("telephone", owner.getTelephone(), SearchOperation.MATCH_START));
 		}
 		return spec;
